@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() { const posts = await getCollection('blog', ({ data }) => !data.draft); return posts.map((post) => ({ params: { slug: post.id }, props: { post } })); }
+const { post } = Astro.props; const { Content } = await render(post);
+---
+<BaseLayout title={`${post.data.title} | GetEVReal`} description={post.data.excerpt}><section><div class="container prose"><p class="eyebrow">{post.data.publishDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p><h1>{post.data.title}</h1><p class="muted">{post.data.excerpt}</p><div class="meta-list">{post.data.tags.map((tag) => <span class="pill">{tag}</span>)}</div><div style="margin-top:2rem;"><Content /></div></div></section></BaseLayout>
